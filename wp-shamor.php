@@ -10,6 +10,9 @@
 
 defined( 'ABSPATH' ) or die( 'No access' );
 
+define('CANDLE_BEFORE_SUNSET' , 18);
+define('HAVDALAH_AFTER_SUNSET' , 50);
+
 function plugin_action_links($links) {
 	$settings_link = '<a href="' . admin_url('admin.php?page=wp-shamor%2Fwp-shamor.php') . '" title="' . __('הגדרות', 'wp-shamor') . '">' . __('הגדרות', 'wp-shamor') . '</a>';
 	array_unshift($links, $settings_link);
@@ -25,77 +28,36 @@ function language_redirect($template) {
     return $template;
 }
 
-add_action( 'template_include', 'move_out_of_site' );
+add_filter( 'template_include', 'move_out_of_site');
 function move_out_of_site($template = ''){
-	if(isset( $_GET['wp_shamor'] ) && $_GET['wp_shamor'] == 'preview')
+	if(isset( $_GET['wp_shamor'] ) && $_GET['wp_shamor'] == 'preview'){
 		return trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
-	//$url = 'https://www.hebcal.com/shabbat/?cfg=json&geonameid=281184&m=50';
+	}
+
 	$publicIP = get_client_ip();
+
 	$geoJson     = file_get_contents("http://ipinfo.io/$publicIP/geo");
 	$geoJson     = json_decode($geoJson, true);
-	$geoLocationParts = explode(",", $geoJson['loc']);
-	$url = 'https://www.hebcal.com/hebcal/?v=1&cfg=json&maj=on&min=off&mod=off&nx=off&year=now&month=' . 
-		date("m") . 
-		'&ss=off&mf=off&c=on&geo=pos&latitude=' . $geoLocationParts[0] . '&longitude=' . $geoLocationParts[1] . '&tzid=' . $geoJson['timezone'] . '&m=50&b=18&s=off';
-	$response = file_get_contents($url);
-	$response = json_decode($response, true);
-	$candle_lighting = '';
-	$havdala = '';
-	$json_items = $response['items'];
-	foreach($json_items as $item) {
-		$category = $item['category'];
-		if($category == 'candles'){
-			$candle_lighting = $item['date'];
-			$candle_lighting = str_replace('T', ' ', $candle_lighting);
-			$pos = strpos($candle_lighting, '+');
-			$candle_lighting = substr($candle_lighting, 0, $pos);
-		}
-		if($category == 'havdalah'){
-			$havdala = $item['date'];
-			$havdala = str_replace('T', ' ', $havdala);
-			$pos = strpos($havdala, '+');
-			$havdala = substr($havdala, 0, $pos);		
-		}	
-		$cl_date = DateTime::createFromFormat('Y-m-d H:i:s', $candle_lighting);
-		$hl_date = DateTime::createFromFormat('Y-m-d H:i:s', $havdala);	
-		$today = date('Y-m-d H:i');
-		if($hl_date != false && $hl_date->format('Y-m-d') < date('Y-m-d') &&
-		  ($cl_date == false || $hl_date->format('Y-m-d') > $cl_date->format('Y-m-d'))) {
-			$candle_lighting = '';
-			$havdala = '';
-		}
-		if($candle_lighting != '' && $havdala != '') {
-			break;
-		}
-	}	
-	$cl_date = DateTime::createFromFormat('Y-m-d H:i:s', $candle_lighting);
-	if(!$cl_date) {
-		return $template;
-	}
-	$start_time =  get_option('start_time');
-	$s_pos = strpos($start_time, ':');
-	$start_hours = substr($start_time, 0, $s_pos);
-	$start_minutes = substr($start_time, $s_pos + 1, strlen($start_time));
-	$cl_date->modify('-' . $start_hours . ' hours -' .$start_minutes . ' minutes');
-	$cl_date = $cl_date->format('Y-m-d H:i');	
-	$hl_date = DateTime::createFromFormat('Y-m-d H:i:s', $havdala);	
-	if(!$hl_date)
-	    return $template;
-	$end_time =  get_option('end_time');
-	$e_pos = strpos($end_time, ':');
-	$end_hours = substr($end_time, 0, $e_pos);
-	$end_minutes = substr($end_time, $e_pos + 1, strlen($end_time));
-	$hl_date->modify('+' . $end_hours . ' hours -' .$end_minutes . ' minutes');
-	$hl_date = $hl_date->format('Y-m-d H:i');	
-	date_default_timezone_set('Asia/Jerusalem');
-	$date = date('Y-m-d H:i');		
-	if($date >= $cl_date && $date <= $hl_date) {
+	$timezone = $geoJson['timezone'];
+	list($latitude, $longitude) = explode(",", $geoJson['loc']);
+
+	$sunset = date_sun_info(time(), $latitude, $longitude)['sunset'];
+	$candle_lighting = $sunset - CANDLE_BEFORE_SUNSET * 60;
+	$havdalah = $sunset + HAVDALAH_AFTER_SUNSET * 60;
+
+	date_default_timezone_set($timezone);
+
+	if ((date('l') == 'Friday' && time() > $candle_lighting) || (date('l') == 'Saturday' && time() < $havdalah)){
+
 	    if(empty($template)) {
 	        echo get_home_url() . '/wp-content/plugins/wp-shamor/block_page.php'; 
 	        exit;
-	    } else
-	        return trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
-	} 
+		}
+		else {
+			$my_template = trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
+	        return $my_template;
+		}
+	}
 	if(empty($template)) {
 		exit;
 	}

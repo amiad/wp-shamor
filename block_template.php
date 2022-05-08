@@ -29,8 +29,5 @@
 	</main><!-- .site-main -->
 
 </div><!-- .content-area -->
-<div style="display: none;">
-	<?php get_footer(); ?>
-</div>
 </body>
 </html>

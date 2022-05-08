@@ -45,6 +45,12 @@ function move_out_of_site($template = ''){
 	$candle_lighting = $sunset - CANDLE_BEFORE_SUNSET * 60;
 	$havdalah = $sunset + HAVDALAH_AFTER_SUNSET * 60;
 
+	$start_time = get_option('start_time') ?: '0';
+	$end_time = get_option('end_time') ?: '0';
+
+	$candle_lighting = strtotime("+$start_time", $candle_lighting);
+	$havdalah = strtotime("+$end_time", $havdalah);
+
 	date_default_timezone_set($timezone);
 
 	if ((date('l') == 'Friday' && time() > $candle_lighting) || (date('l') == 'Saturday' && time() < $havdalah)){

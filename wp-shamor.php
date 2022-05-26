@@ -62,6 +62,7 @@ function language_redirect($template) {
 
 add_filter( 'template_include', 'move_out_of_site');
 function move_out_of_site($template = ''){
+	echo wp_shammor_countdown();
 	if(isset( $_GET['wp_shamor'] ) && $_GET['wp_shamor'] == 'preview'){
 		return trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
 	}
@@ -224,7 +225,7 @@ function shamor_site_get_headers_503($date_end = '')
 	    header('Retry-After: ' . gmdate('D, d M Y H:i:s', $date_end));
 }
 
-//add_action( 'wp_enqueue_scripts', 'wp_shammor_enqueue' );
+add_action( 'wp_enqueue_scripts', 'wp_shammor_enqueue' );
 function wp_shammor_enqueue($hook) {
 	wp_enqueue_script( 'ajax-script', plugins_url( 'script.js', __FILE__ ), array('jquery') );
 	wp_localize_script( 'ajax-script', 'ajax_object',

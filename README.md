@@ -20,8 +20,7 @@ Redirect user out of your site on Shabbat and Holiday
 2. Set it up in Dashboard
 
 ## Screenshots ##
-###1. Dashboard###
-[missing image]
+![Dashboard](https://raw.githubusercontent.com/amiad/wp-shamor/master/screenshot-1.png)
 
 
 ## Changelog ##

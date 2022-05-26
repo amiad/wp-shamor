@@ -3,7 +3,7 @@
    Plugin Name: WP Shamor
    Plugin URI: http://quicksolutions.co.il/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
-   Version: 1.0.5
+   Version: 1.1
    Author: Rivka Chollack
    Author URI: http://quicksolutions.co.il/
    */

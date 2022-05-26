@@ -62,18 +62,18 @@ function language_redirect($template) {
 
 add_filter( 'template_include', 'move_out_of_site');
 function move_out_of_site($template = ''){
-	echo wp_shammor_countdown();
+
 	if(isset( $_GET['wp_shamor'] ) && $_GET['wp_shamor'] == 'preview'){
 		return trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
 	}
 
 	$times = get_shabbat_times();
-
+	
 	if ((date('l') == 'Friday' && time() > $times['candle_lighting']) || (date('l') == 'Saturday' && time() < $times['havdalah'])){
 
 	    if(empty($template)) {
 	        echo get_home_url() . '/wp-content/plugins/wp-shamor/block_page.php'; 
-	        exit;
+	        wp_die();
 		}
 		else {
 			$my_template = trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
@@ -288,7 +288,12 @@ function wp_shammor_countdown($atts) {
 function get_havdalah_time() {
 	$times = get_shabbat_times();
 	$havdalah = $times['havdalah'];
-	$dt = new DateTime("now", new DateTimeZone($times['timezone']));
-	$dt->setTimestamp($havdalah);
-	return apply_filters('havdalah_time', explode(':', $dt->format('H:i:s')));
+	
+	$seconds = strtotime('Saturday ' . date('H:i:s', $havdalah)) - time();
+	$days = gmdate('d', $seconds);
+	$hours = $days * 24 + gmdate('h', $seconds);
+	$hours = str_pad($hours, 2, '0', STR_PAD_LEFT);
+	$time = $hours . ':' . gmdate('i:s', $seconds);
+
+	return apply_filters('havdalah_time', explode(':', $time));
 }

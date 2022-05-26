@@ -177,7 +177,7 @@ function shamor_plugin_settings_page() {
 			</tr>
 			<tr>
 				<td colspan="3">
-					טיפ: בטמפלייט החסימה ניתן לשלב את השורטקוד [wp_shammor_countdown] כדי להציג סטופר המראה עוד כמה זמן יפתח האתר מחדש.
+					טיפ: בטמפלייט החסימה ניתן לשלב את השורטקוד <code>[wp_shammor_countdown]</code> כדי להציג סטופר המראה עוד כמה זמן יפתח האתר מחדש.
 				</td>
 			</tr>
 		</table>

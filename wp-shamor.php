@@ -10,8 +10,40 @@
 
 defined( 'ABSPATH' ) or die( 'No access' );
 
+require_once 'vendor/autoload.php';
+use GeoIp2\Database\Reader;
+
 define('CANDLE_BEFORE_SUNSET' , 18);
 define('HAVDALAH_AFTER_SUNSET' , 50);
+
+function get_location_data_from_ip(){
+	$reader = new Reader(__DIR__ . '/db/GeoLite2-City.mmdb');
+	$record = $reader->city(get_client_ip());
+
+	return apply_filters('location_data_from_ip', $record->location);
+};
+
+function get_shabbat_times(){
+	$location = get_location_data_from_ip();
+
+	$sunset = date_sun_info(time(), $location->latitude, $location->longitude)['sunset'];
+	$candle_lighting = $sunset - CANDLE_BEFORE_SUNSET * 60;
+	$havdalah = $sunset + HAVDALAH_AFTER_SUNSET * 60;
+
+	$start_time = get_option('start_time') ?: '0';
+	$end_time = get_option('end_time') ?: '0';
+
+	$candle_lighting = strtotime("-$start_time", $candle_lighting);
+	$havdalah = strtotime("+$end_time", $havdalah);
+
+	$times = [
+		'candle_lighting' => $candle_lighting,
+		'havdalah' => $havdalah,
+		'timezone' => $location->timeZone,
+	];
+
+	return apply_filters('shabbat_times', $times);
+}
 
 function plugin_action_links($links) {
 	$settings_link = '<a href="' . admin_url('admin.php?page=wp-shamor%2Fwp-shamor.php') . '" title="' . __('הגדרות', 'wp-shamor') . '">' . __('הגדרות', 'wp-shamor') . '</a>';
@@ -34,26 +66,9 @@ function move_out_of_site($template = ''){
 		return trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
 	}
 
-	$publicIP = get_client_ip();
+	$times = get_shabbat_times();
 
-	$geoJson     = file_get_contents("http://ipinfo.io/$publicIP/geo");
-	$geoJson     = json_decode($geoJson, true);
-	$timezone = $geoJson['timezone'];
-	list($latitude, $longitude) = explode(",", $geoJson['loc']);
-
-	$sunset = date_sun_info(time(), $latitude, $longitude)['sunset'];
-	$candle_lighting = $sunset - CANDLE_BEFORE_SUNSET * 60;
-	$havdalah = $sunset + HAVDALAH_AFTER_SUNSET * 60;
-
-	$start_time = get_option('start_time') ?: '0';
-	$end_time = get_option('end_time') ?: '0';
-
-	$candle_lighting = strtotime("+$start_time", $candle_lighting);
-	$havdalah = strtotime("+$end_time", $havdalah);
-
-	date_default_timezone_set($timezone);
-
-	if ((date('l') == 'Friday' && time() > $candle_lighting) || (date('l') == 'Saturday' && time() < $havdalah)){
+	if ((date('l') == 'Friday' && time() > $times['candle_lighting']) || (date('l') == 'Saturday' && time() < $times['havdalah'])){
 
 	    if(empty($template)) {
 	        echo get_home_url() . '/wp-content/plugins/wp-shamor/block_page.php'; 
@@ -209,7 +224,7 @@ function shamor_site_get_headers_503($date_end = '')
 	    header('Retry-After: ' . gmdate('D, d M Y H:i:s', $date_end));
 }
 
-add_action( 'wp_enqueue_scripts', 'wp_shammor_enqueue' );
+//add_action( 'wp_enqueue_scripts', 'wp_shammor_enqueue' );
 function wp_shammor_enqueue($hook) {
 	wp_enqueue_script( 'ajax-script', plugins_url( 'script.js', __FILE__ ), array('jquery') );
 	wp_localize_script( 'ajax-script', 'ajax_object',
@@ -270,40 +285,9 @@ function wp_shammor_countdown($atts) {
 }
 
 function get_havdalah_time() {
-	$publicIP = get_client_ip();
-	$geoJson     = file_get_contents("http://ipinfo.io/$publicIP/geo");
-	$geoJson     = json_decode($geoJson, true);
-	$geoLocationParts = explode(",", $geoJson['loc']);
-	$url = 'https://www.hebcal.com/hebcal/?v=1&cfg=json&maj=on&min=off&mod=off&nx=off&year=now&month=' . 
-		date("m") . 
-		'&ss=off&mf=off&c=on&geo=pos&latitude=' . $geoLocationParts[0] . '&longitude=' . $geoLocationParts[1] . '&tzid=' . $geoJson['timezone'] . '&m=50&b=18&s=off';
-	$response = file_get_contents($url);
-	$response = json_decode($response, true);
-	$candle_lighting = '';
-	$havdala = '';
-	$json_items = $response['items'];
-	foreach($json_items as $item) {
-		$category = $item['category'];
-		if($category == 'havdalah'){
-			$havdala = $item['date'];
-			$havdala = str_replace('T', ' ', $havdala);
-			$pos = strpos($havdala, '+');
-			$havdala = substr($havdala, 0, $pos);		
-		}
-		$hl_date = DateTime::createFromFormat('Y-m-d H:i:s', $havdala);	
-		if($hl_date != false && $hl_date->format('Y-m-d') >= date('Y-m-d')) {
-			$end_time =  get_option('end_time');
-			$e_pos = strpos($end_time, ':');
-			$end_hours = intval(substr($end_time, 0, $e_pos));
-			$end_minutes = intval(substr($end_time, $e_pos + 1, strlen($end_time)));
-			$seconds = strtotime($havdala) + ((60*60*$end_hours)+(60*$end_minutes)) - strtotime('now');
-			$hours = intval($seconds / (60*60));
-			$seconds -= ($hours*60*60);
-			$minutes = intval($seconds / 60);
-			$seconds -= ($minutes*60);
-			return [$hours,$minutes,$seconds];
-		}
-	}
-	return [0,0,0];
-	
+	$times = get_shabbat_times();
+	$havdalah = $times['havdalah'];
+	$dt = new DateTime("now", new DateTimeZone($times['timezone']));
+	$dt->setTimestamp($havdalah);
+	return apply_filters('havdalah_time', explode(':', $dt->format('H:i:s')));
 }

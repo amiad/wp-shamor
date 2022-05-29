@@ -45,6 +45,39 @@ function get_shabbat_times(){
 	return apply_filters('shabbat_times', $times);
 }
 
+define('YAMIM_TOVIM', [
+	'טו ניסן',
+	'כא ניסן',
+	'ו סיון',
+	'א תשרי',
+	'ב תשרי',
+	'י תשרי',
+	'טו תשרי',
+	'כב תשרי',
+]);
+define('ISRUCHAG', [
+	'טז ניסן',
+	'כב ניסן',
+	'ז סיון',
+	'טז תשרי',
+	'כג תשרי',
+]);
+
+function is_yom_tov(){
+	$hebdate = get_hebdate();
+	return apply_filters('is_yom_tov', in_array($hebdate, YAMIM_TOVIM));
+}
+function get_hebdate(){
+	$juldate = gregoriantojd(...explode('/', date('m/d/Y')));
+	$hebdate = jdtojewish($juldate, true);
+	$hebdate = iconv("windows-1255", "UTF-8", $hebdate);
+
+	$hebdate = explode(' ' , $hebdate);
+	$hebdate = "{$hebdate[0]} {$hebdate[1]}";
+
+	return $hebdate;
+}
+
 function plugin_action_links($links) {
 	$settings_link = '<a href="' . admin_url('admin.php?page=wp-shamor%2Fwp-shamor.php') . '" title="' . __('הגדרות', 'wp-shamor') . '">' . __('הגדרות', 'wp-shamor') . '</a>';
 	array_unshift($links, $settings_link);

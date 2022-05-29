@@ -67,8 +67,12 @@ function is_yom_tov(){
 	$hebdate = get_hebdate();
 	return apply_filters('is_yom_tov', in_array($hebdate, YAMIM_TOVIM));
 }
-function get_hebdate(){
-	$juldate = gregoriantojd(...explode('/', date('m/d/Y')));
+function is_erev_yom_tov(){
+	$hebdate = get_hebdate('tomorrow');
+	return apply_filters('is_erev_yom_tov', in_array($hebdate, YAMIM_TOVIM));
+}
+function get_hebdate($str = 'now'){
+	$juldate = gregoriantojd(...explode('/', date('m/d/Y', strtotime($str))));
 	$hebdate = jdtojewish($juldate, true);
 	$hebdate = iconv("windows-1255", "UTF-8", $hebdate);
 

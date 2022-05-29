@@ -39,7 +39,6 @@ function get_shabbat_times(){
 	$times = [
 		'candle_lighting' => $candle_lighting,
 		'havdalah' => $havdalah,
-		'timezone' => $location->timeZone,
 	];
 
 	return apply_filters('shabbat_times', $times);
@@ -67,10 +66,12 @@ function is_yom_tov(){
 	$hebdate = get_hebdate();
 	return apply_filters('is_yom_tov', in_array($hebdate, YAMIM_TOVIM));
 }
+
 function is_erev_yom_tov(){
 	$hebdate = get_hebdate('tomorrow');
 	return apply_filters('is_erev_yom_tov', in_array($hebdate, YAMIM_TOVIM));
 }
+
 function get_hebdate($str = 'now'){
 	$juldate = gregoriantojd(...explode('/', date('m/d/Y', strtotime($str))));
 	$hebdate = jdtojewish($juldate, true);
@@ -106,7 +107,7 @@ function move_out_of_site($template = ''){
 
 	$times = get_shabbat_times();
 	
-	if ((date('l') == 'Friday' && time() > $times['candle_lighting']) || (date('l') == 'Saturday' && time() < $times['havdalah'])){
+	if (((date('l') == 'Friday' || is_erev_yom_tov()) && time() > $times['candle_lighting']) || ((date('l') == 'Saturday' || is_yom_tov()) && time() < $times['havdalah'])){
 
 	    if(empty($template)) {
 	        echo get_home_url() . '/wp-content/plugins/wp-shamor/block_page.php'; 

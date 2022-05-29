@@ -6,7 +6,7 @@ jQuery(document).ready(function(){
 		shouldShammor = false;
 		jQuery.post(ajax_object.ajax_url, data, function(response) {
 			if(response && response != "0") {
-				//window.location.href = response;
+				window.location.href = response;
 			}
 		});
 	}

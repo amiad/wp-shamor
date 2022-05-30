@@ -20,6 +20,9 @@ function get_location_data_from_ip(){
 	$reader = new Reader(__DIR__ . '/db/GeoLite2-City.mmdb');
 	$record = $reader->city(get_client_ip());
 
+	global $country;
+	$country = $record->country->isoCode;
+
 	return apply_filters('location_data_from_ip', $record->location);
 };
 
@@ -53,6 +56,7 @@ define('YAMIM_TOVIM', [
 	'י תשרי',
 	'טו תשרי',
 	'כב תשרי',
+	//'כט אייר',
 ]);
 define('ISRUCHAG', [
 	'טז ניסן',
@@ -70,6 +74,17 @@ function is_yom_tov(){
 function is_erev_yom_tov(){
 	$hebdate = get_hebdate('tomorrow');
 	return apply_filters('is_erev_yom_tov', in_array($hebdate, YAMIM_TOVIM));
+}
+
+function get_yamim_tovim(){
+	$yamim_tovim = YAMIM_TOVIM;
+	
+	global $country;
+	if ($country != 'IL'){
+		$yamim_tovim = array_merge($yamim_tovim, ISRUCHAG);
+	}
+
+	return apply_filters('yamim_tovim', $yamim_tovim);
 }
 
 function get_hebdate($str = 'now'){

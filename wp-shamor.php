@@ -56,7 +56,6 @@ define('YAMIM_TOVIM', [
 	'י תשרי',
 	'טו תשרי',
 	'כב תשרי',
-	//'כט אייר',
 ]);
 define('ISRUCHAG', [
 	'טז ניסן',
@@ -342,14 +341,14 @@ function get_havdalah_time() {
 	$times = get_shabbat_times();
 	$havdalah = $times['havdalah'];
 	
-	$seconds = strtotime(date('H:i:s', $havdalah)) - time();
+	$seconds = $havdalah - time();
 	
 	$days = 0;
 	while (date('l', strtotime("+$days days")) == 'Friday' || is_erev_yom_tov($days)){
 		$days++;
 	}
-	
-	$hours = $days * 24 + gmdate('h', $seconds);
+
+	$hours = $days * 24 + intdiv($seconds ,3600);
 	$hours = str_pad($hours, 2, '0', STR_PAD_LEFT);
 	$time = $hours . ':' . gmdate('i:s', $seconds);
 

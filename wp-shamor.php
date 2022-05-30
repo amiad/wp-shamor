@@ -71,8 +71,8 @@ function is_yom_tov(){
 	return apply_filters('is_yom_tov', in_array($hebdate, YAMIM_TOVIM));
 }
 
-function is_erev_yom_tov(){
-	$hebdate = get_hebdate('tomorrow');
+function is_erev_yom_tov($days = 0){
+	$hebdate = get_hebdate("+$days days");
 	return apply_filters('is_erev_yom_tov', in_array($hebdate, YAMIM_TOVIM));
 }
 
@@ -342,8 +342,13 @@ function get_havdalah_time() {
 	$times = get_shabbat_times();
 	$havdalah = $times['havdalah'];
 	
-	$seconds = strtotime('Saturday ' . date('H:i:s', $havdalah)) - time();
-	$days = gmdate('d', $seconds);
+	$seconds = strtotime(date('H:i:s', $havdalah)) - time();
+	
+	$days = 0;
+	while (date('l', strtotime("+$days days")) == 'Friday' || is_erev_yom_tov($days)){
+		$days++;
+	}
+	
 	$hours = $days * 24 + gmdate('h', $seconds);
 	$hours = str_pad($hours, 2, '0', STR_PAD_LEFT);
 	$time = $hours . ':' . gmdate('i:s', $seconds);

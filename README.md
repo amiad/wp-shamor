@@ -15,6 +15,9 @@
 
 Redirect user out of your site on Shabbat and Holiday
 
+## Description ##
+Read more on the [official website](https://wpshamor.com/).
+
 ## Installation ##
 1. Install the plugin
 2. Set it up in Dashboard

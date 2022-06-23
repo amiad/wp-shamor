@@ -7,7 +7,10 @@ Requires PHP: 5.3
 Stable tag: 1.1
 License: GPL
 
-Redirect user out of your site on Shabbat and Holiday
+Redirect user out of your site on Shabbat and Holiday.
+
+== Description ==
+Read more on the <a href="https://wpshamor.com/">official website</a>.
 
 == Installation ==
 1. Install the plugin

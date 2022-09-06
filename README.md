@@ -1,4 +1,4 @@
-# WP Shamor #
+# Shamor #
 **Contributors:** hatul  
 
 **Tags:** shabbat, jewish  

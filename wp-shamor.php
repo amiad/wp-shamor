@@ -1,7 +1,7 @@
 <?php
    /*
-   Plugin Name: WP Shamor
-   Plugin URI: http://quicksolutions.co.il/
+   Plugin Name: Shamor
+   Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
    Version: 1.1
    Author: Rivka Chollack
@@ -36,8 +36,8 @@ function get_shabbat_times(){
 	$start_time = get_option('start_time') ?: '0';
 	$end_time = get_option('end_time') ?: '0';
 
-	$candle_lighting = strtotime("-$start_time", $candle_lighting);
-	$havdalah = strtotime("+$end_time", $havdalah);
+	$candle_lighting = strtotime("+$start_time", $candle_lighting);
+	$havdalah = strtotime("-$end_time", $havdalah);
 
 	$times = [
 		'candle_lighting' => $candle_lighting,

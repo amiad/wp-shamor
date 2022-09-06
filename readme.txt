@@ -1,4 +1,4 @@
-=== WP Shamor ===
+=== Shamor ===
 Contributors: hatul
 Tags: shabbat, jewish
 Requires at least: 2.0

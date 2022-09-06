@@ -5,11 +5,11 @@
 
 **Requires at least:** 2.0  
 
-**Tested up to:** 6.0  
+**Tested up to:** 6.0.2 
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.1  
+**Stable tag:** 1.2  
 
 **License:** GPL  
 
@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.2 ###
+* Fix some bugs
 ### 1.1 ###
 * Get geoip locally
 * Get sunset locally

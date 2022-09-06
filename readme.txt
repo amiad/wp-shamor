@@ -20,6 +20,8 @@ Read more on the <a href="https://wpshamor.com/">official website</a>.
 1. Dashboard
 
 == Changelog ==
+= 1.2 =
+* Fix some bugs
 = 1.1 =
 * Get geoip locally
 * Get sunset locally

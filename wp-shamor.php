@@ -29,7 +29,7 @@ class Shamor {
 
 	function get_location_data_from_ip(){
 		$reader = new Reader(__DIR__ . '/db/GeoLite2-City.mmdb');
-		$record = $reader->city(get_client_ip());
+		$record = $reader->city($this->get_client_ip());
 
 		$this->country = $record->country->isoCode;
 
@@ -129,7 +129,7 @@ class Shamor {
 
 		$times = $this->get_shabbat_times();
 		
-		if (((date('l') == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || ((date('l') == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
+		if (((date('l') == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || ((date('l') == 'Sunday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
 
 			if(empty($template)) {
 				echo plugin_dir_url(__FILE__) . 'block_page.php'; 

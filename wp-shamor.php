@@ -25,8 +25,6 @@ class Shamor {
 		add_action('wp_ajax_validate_wp_shammor', [$this, 'validate_wp_shammor']);
 		add_action('wp_ajax_nopriv_validate_wp_shammor', [$this, 'validate_wp_shammor']);
 		add_shortcode('wp_shammor_countdown', [$this, 'wp_shammor_countdown']);
-
-		add_action('wp', [$this, 'block_page']);
 	}
 
 	function get_location_data_from_ip(){
@@ -191,7 +189,7 @@ class Shamor {
 		<div class="wrap">
 		<h1>הגדרות WP Shamor</h1>
 			<div>
-				<a href="<?php home_url();?>/?shamor=1" target="_blank">לחצו כאן כדי לראות את דף החסימה שיוצג בשבתות וחגים</a>
+				<a href="<?php home_url();?>/?wp_shamor=preview" target="_blank">לחצו כאן כדי לראות את דף החסימה שיוצג בשבתות וחגים</a>
 			</div>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'shamor-plugin-settings-group' ); ?>
@@ -358,13 +356,6 @@ class Shamor {
 		$time = $hours . ':' . gmdate('i:s', $seconds);
 
 		return apply_filters('shamor_havdalah_time', explode(':', $time));
-	}
-
-	function block_page(){
-		if (filter_input(INPUT_GET, 'shamor') == 1){
-			require_once __DIR__ . '/block_template.php';
-			die;
-		}
 	}
 }
 

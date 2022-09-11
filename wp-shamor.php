@@ -77,12 +77,13 @@ class Shamor {
 
 	function is_yom_tov(){
 		$hebdate = $this->get_hebdate();
-		return apply_filters('shamor_is_yom_tov', in_array($hebdate, SELF::YAMIM_TOVIM));
+		return apply_filters('shamor_is_yom_tov', in_array($hebdate, $this->get_yamim_tovim()));
 	}
 
 	function is_erev_yom_tov($days = 0){
+		$days++;
 		$hebdate = $this->get_hebdate("+$days days");
-		return apply_filters('shamor_is_erev_yom_tov', in_array($hebdate, SELF::YAMIM_TOVIM));
+		return apply_filters('shamor_is_erev_yom_tov', in_array($hebdate, $this->get_yamim_tovim()));
 	}
 
 	function get_yamim_tovim(){
@@ -131,8 +132,8 @@ class Shamor {
 		
 		if (((date('l') == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || ((date('l') == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
 
-			if(empty($template)) {
-				echo plugin_dir_url(__FILE__) . 'block_page.php'; 
+			if (empty($template)) {
+				echo get_home_url() . '/?wp_shamor=preview';
 				wp_die();
 			}
 			else {
@@ -258,12 +259,13 @@ class Shamor {
 		</head>
 		<body>
 			<?php 
-				if(empty(get_option('shamor_display_template'))) {
+				if (empty(get_option('shamor_display_template'))) {
 					echo '<div style="text-align: center; padding: 100px;"><h1>';
-					echo get_option('shamor_display_text'); 
+					echo esc_html(get_option('shamor_display_text')); 
 					echo '</h1><div>';
-				} else {
-					echo do_shortcode('[elementor-template id="' . get_option('shamor_display_template') . '"]');
+				}
+				else {
+					echo do_shortcode('[elementor-template id="' . esc_html(get_option('shamor_display_template')) . '"]');
 				}
 			?>
 		</body>

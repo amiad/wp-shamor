@@ -44,7 +44,7 @@ class Shamor {
 		$havdalah = $sunset + SELF::HAVDALAH_AFTER_SUNSET * 60;
 
 		$start_time = get_option('shamor_start_time') ?: '0';
-		$end_time = get_option('shamorend_time') ?: '0';
+		$end_time = get_option('shamor_end_time') ?: '0';
 
 		$candle_lighting = strtotime("+$start_time", $candle_lighting);
 		$havdalah = strtotime("-$end_time", $havdalah);

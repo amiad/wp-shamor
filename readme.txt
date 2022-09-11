@@ -4,7 +4,7 @@ Tags: shabbat, jewish
 Requires at least: 2.0
 Tested up to: 6.0.2
 Requires PHP: 5.3
-Stable tag: 1.1
+Stable tag: 1.3
 License: GPL
 
 Redirect user out of your site on Shabbat and Holiday.
@@ -20,6 +20,8 @@ Read more on the <a href="https://wpshamor.com/">official website</a>.
 1. Dashboard
 
 == Changelog ==
+= 1.3 =
+* Improve code
 = 1.2 =
 * Fix some bugs
 = 1.1 =

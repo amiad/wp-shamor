@@ -1,5 +1,5 @@
 # Shamor #
-**Contributors:** hatul  
+**Contributors:** Rivka Chollack, Amiad Bareli
 
 **Tags:** shabbat, jewish  
 
@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.2  
+**Stable tag:** 1.3  
 
 **License:** GPL  
 
@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.3 ###
+* Improve code
 ### 1.2 ###
 * Fix some bugs
 ### 1.1 ###

@@ -7,7 +7,7 @@
 	<?php 
 	wp_head(); 
 	if(isset($hl_date))
-		shamor_site_get_headers_503($hl_date);
+		$shamor->shamor_site_get_headers_503($hl_date);
 	?>
 	<script>
 		shouldShammor = false;
@@ -17,12 +17,12 @@
 <div id="primary" class="content-area">
 	<main id="main" class="site-main" role="main">
 		<?php
-		if(empty(get_option('display_template'))) {
+		if(empty(get_option('shamor_display_template'))) {
 	        echo '<div style="text-align: center; padding: 100px;"><h1>';
-	        echo get_option('display_text'); 
+	        echo esc_html(get_option('shamor_display_text')); 
 	        echo '</h1><div>';
 	    } else {
-	        echo do_shortcode('[elementor-template id="' . get_option('display_template') . '"]');
+	        echo do_shortcode('[elementor-template id="' . esc_html(get_option('shamor_display_template')) . '"]');
 	    }
 		?>
 

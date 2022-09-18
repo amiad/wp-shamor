@@ -28,8 +28,14 @@ class Shamor {
 	}
 
 	function get_location_data_from_ip(){
+		$ip = $this->get_client_ip();
+
+		if (! $ip){
+			return apply_filters('shamor_location_data_from_ip', false);
+		}
+
 		$reader = new Reader(__DIR__ . '/db/GeoLite2-City.mmdb');
-		$record = $reader->city($this->get_client_ip());
+		$record = $reader->city($ip);
 
 		$this->country = $record->country->isoCode;
 
@@ -38,6 +44,10 @@ class Shamor {
 
 	function get_shabbat_times(){
 		$location = $this->get_location_data_from_ip();
+
+		if (! $location){
+			return apply_filters('shamor_shabbat_times', false);
+		}
 
 		$sunset = date_sun_info(time(), $location->latitude, $location->longitude)['sunset'];
 		$candle_lighting = $sunset - SELF::CANDLE_BEFORE_SUNSET * 60;
@@ -130,7 +140,7 @@ class Shamor {
 
 		$times = $this->get_shabbat_times();
 		
-		if (((date('l') == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || ((date('l') == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
+		if ((! $times) || ((date('l') == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || ((date('l') == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
 
 			if (empty($template)) {
 				echo get_home_url() . '/?wp_shamor=preview';
@@ -152,21 +162,24 @@ class Shamor {
 		$ipaddress = '';
 		if (isset($_SERVER['HTTP_CLIENT_IP'])) {
 			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-		} else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		}
+		else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		} else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
+		}
+		else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
 			$ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-		} else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+		}
+		else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
 			$ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-		} else if (isset($_SERVER['HTTP_FORWARDED'])) {
+		}
+		else if (isset($_SERVER['HTTP_FORWARDED'])) {
 			$ipaddress = $_SERVER['HTTP_FORWARDED'];
-		} else if (isset($_SERVER['REMOTE_ADDR'])) {
+		}
+		else if (isset($_SERVER['REMOTE_ADDR'])) {
 			$ipaddress = $_SERVER['REMOTE_ADDR'];
-		} else {
-			$ipaddress = 'UNKNOWN';
 		}
 
-		return esc_html($ipaddress);
+		return filter_var($ipaddress, FILTER_VALIDATE_IP);
 	}
 
 	function shamor_plugin_menu() {

@@ -19,12 +19,21 @@ class Shamor {
 	const HAVDALAH_AFTER_SUNSET = 50;
 
 	function __construct(){
+		if (! extension_loaded('calendar')){
+			add_action('admin_notices', [$this, 'show_admin_error']);
+			return;
+		}
+		
 		add_filter('template_include', [$this, 'move_out_of_site']);
 		add_action('admin_menu', [$this, 'shamor_plugin_menu']);
 		add_action('wp_enqueue_scripts', [$this, 'wp_shammor_enqueue']);
 		add_action('wp_ajax_validate_wp_shammor', [$this, 'validate_wp_shammor']);
 		add_action('wp_ajax_nopriv_validate_wp_shammor', [$this, 'validate_wp_shammor']);
 		add_shortcode('wp_shammor_countdown', [$this, 'wp_shammor_countdown']);
+	}
+
+	function show_admin_error(){
+		printf('<div class="notice notice-error"><p>%s</p></div>', __('WP Shamor requires the PHP calendar extension to be activated on the server to work properly.', 'wp-shamor'));
 	}
 
 	function get_location_data_from_ip(){

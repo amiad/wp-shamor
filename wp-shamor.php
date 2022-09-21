@@ -171,26 +171,22 @@ class Shamor {
 	function get_client_ip()
 	{
 		$ipaddress = '';
-		if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-		}
-		else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		}
-		else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
-			$ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-		}
-		else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-			$ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-		}
-		else if (isset($_SERVER['HTTP_FORWARDED'])) {
-			$ipaddress = $_SERVER['HTTP_FORWARDED'];
-		}
-		else if (isset($_SERVER['REMOTE_ADDR'])) {
-			$ipaddress = $_SERVER['REMOTE_ADDR'];
+		$params = [
+			'HTTP_CLIENT_IP',
+			'HTTP_X_FORWARDED_FOR',
+			'HTTP_X_FORWARDED',
+			'HTTP_FORWARDED_FOR',
+			'HTTP_FORWARDED',
+			'REMOTE_ADDR',
+		];
+		foreach ($params as $param){
+			if (isset($_SERVER[$param]) && rest_is_ip_address($_SERVER[$param])) {
+				$ipaddress = filter_var($_SERVER[$param], FILTER_VALIDATE_IP);
+				break;
+			}
 		}
 
-		return filter_var($ipaddress, FILTER_VALIDATE_IP);
+		return $ipaddress;
 	}
 
 	function shamor_plugin_menu() {

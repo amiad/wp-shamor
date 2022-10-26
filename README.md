@@ -1,17 +1,17 @@
 # Shamor #
 **Contributors:** Rivka Chollack, Amiad Bareli
 
-**Tags:** shabbat, jewish  
+**Tags:** shabbat, jewish
 
-**Requires at least:** 2.0  
+**Requires at least:** 2.0
 
-**Tested up to:** 6.0.2 
+**Tested up to:** 6.1
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.3  
+**Stable tag:** 1.3.1
 
-**License:** GPL  
+**License:** GPL
 
 Redirect user out of your site on Shabbat and Holiday
 

@@ -3,7 +3,7 @@
    Plugin Name: Shamor
    Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
-   Version: 1.3.1
+   Version: 1.4
    Author: Rivka Chollack, Amiad Bareli
    Author URI: http://quicksolutions.co.il/
    */
@@ -24,7 +24,8 @@ class Shamor {
 			return;
 		}
 		
-		add_filter('template_include', [$this, 'move_out_of_site']);
+		add_filter('template_include', [$this, 'block_site']);
+		add_action('template_redirect', [$this, 'move_out_of_site']);
 		add_action('admin_menu', [$this, 'shamor_plugin_menu']);
 		add_action('wp_enqueue_scripts', [$this, 'wp_shammor_enqueue']);
 		add_action('wp_ajax_validate_wp_shammor', [$this, 'validate_wp_shammor']);
@@ -141,10 +142,18 @@ class Shamor {
 		return $template;
 	}
 
-	function move_out_of_site($template = ''){
-
-		if(isset( $_GET['wp_shamor'] ) && $_GET['wp_shamor'] == 'preview'){
+	function block_site($template){
+		if(isset( $_GET['wp_shamor'] )){
 			return trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
+		}
+
+		return $template;
+	}
+
+	function move_out_of_site(){
+
+		if (! empty($_GET['wp_shamor'])){
+			return;
 		}
 
 		$times = $this->get_shabbat_times();
@@ -153,19 +162,14 @@ class Shamor {
 		
 		if ((! $times) || (($weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
 
-			if (empty($template)) {
-				echo get_home_url() . '/?wp_shamor=preview';
-				wp_die();
+			if (wp_doing_ajax()) {
+				echo get_home_url() . '/?wp_shamor=2';
 			}
 			else {
-				$my_template = trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
-				return $my_template;
+				wp_redirect(home_url() . '/?wp_shamor=1');
 			}
+			die;
 		}
-		if(empty($template)) {
-			exit;
-		}
-		return $template;
 	}
 
 	function get_client_ip()

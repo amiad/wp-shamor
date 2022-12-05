@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.4
+**Stable tag:** 1.4.1
 
 **License:** GPL
 
@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.4.1 ###
+* Fix settings link
 ### 1.4 ###
 * Fix cache problem
 ### 1.3 ###

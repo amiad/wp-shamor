@@ -3,7 +3,7 @@
    Plugin Name: Shamor
    Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
-   Version: 1.5
+   Version: 1.5.1
    Author: Rivka Chollack, Amiad Bareli
    */
 
@@ -402,6 +402,16 @@ class Shamor {
 		$time = $hours . ':' . gmdate('i:s', $seconds);
 
 		return apply_filters('shamor_havdalah_time', explode(':', $time));
+	}
+
+	function get_havdalah_hour(){
+		$times = $this->get_shabbat_times();
+		$havdalah = $times['havdalah'];
+		$dt = new DateTime("@$havdalah");
+		$dt->setTimezone(new DateTimeZone($this->location->timeZone));
+		$havdalah_hour = $dt->format('H:i');
+
+		return apply_filters('shamor_get_havdalah_hour', $havdalah_hour);
 	}
 }
 

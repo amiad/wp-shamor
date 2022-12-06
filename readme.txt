@@ -24,6 +24,9 @@ Read more on the <a href="https://wpshamor.com/">official website</a>.
 
 == Changelog ==
 
+= 1.5.1 =
+* Add default message of block
+* Add get_havdalah_hour function
 = 1.5 =
 * Add support Elemenetor CSS
 = 1.4.1 =

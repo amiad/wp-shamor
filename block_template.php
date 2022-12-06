@@ -19,8 +19,14 @@
 		<?php
 		$template_id = get_option('shamor_display_template');
 		if(empty($template_id)) {
+			$shamor_text = get_option('shamor_display_text');
 	        echo '<div style="text-align: center; padding: 100px;"><h1>';
-	        echo esc_html(get_option('shamor_display_text')); 
+			if ($shamor_text){
+	        	echo esc_html($shamor_text);
+			}
+			else {
+				echo ' שבת שלום! נשוב לפעילות עם צאת השבת בשעה ' . $shamor->get_havdalah_hour();
+			}
 	        echo '</h1><div>';
 	    } else {
 	        echo do_shortcode('[elementor-template id="' . esc_html($template_id) . '"]');

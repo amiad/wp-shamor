@@ -160,7 +160,7 @@ class Shamor {
 		$dt = new DateTime("now", new DateTimeZone($this->location->timeZone));
 		$weekday = $dt->format('l');
 		
-		if ((! $times) || (($weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($weekday == 'Tuesday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
+		if ((! $times) || (($weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
 
 			if (wp_doing_ajax()) {
 				echo get_home_url() . '/?wp_shamor=2';

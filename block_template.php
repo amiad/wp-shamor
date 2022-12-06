@@ -17,12 +17,13 @@
 <div id="primary" class="content-area">
 	<main id="main" class="site-main" role="main">
 		<?php
-		if(empty(get_option('shamor_display_template'))) {
+		$template_id = get_option('shamor_display_template');
+		if(empty($template_id)) {
 	        echo '<div style="text-align: center; padding: 100px;"><h1>';
 	        echo esc_html(get_option('shamor_display_text')); 
 	        echo '</h1><div>';
 	    } else {
-	        echo do_shortcode('[elementor-template id="' . esc_html(get_option('shamor_display_template')) . '"]');
+	        echo do_shortcode('[elementor-template id="' . esc_html($template_id) . '"]');
 	    }
 		?>
 

@@ -3,9 +3,8 @@
    Plugin Name: Shamor
    Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
-   Version: 1.4.1
+   Version: 1.5
    Author: Rivka Chollack, Amiad Bareli
-   Author URI: http://quicksolutions.co.il/
    */
 
 defined( 'ABSPATH' ) or die( 'No access' );
@@ -144,6 +143,7 @@ class Shamor {
 
 	function block_site($template){
 		if(isset( $_GET['wp_shamor'] )){
+			add_action( 'wp_enqueue_scripts', [$this, 'load_elementor_css']);
 			return trailingslashit(plugin_dir_path(__FILE__)) . 'block_template.php';
 		}
 
@@ -160,7 +160,7 @@ class Shamor {
 		$dt = new DateTime("now", new DateTimeZone($this->location->timeZone));
 		$weekday = $dt->format('l');
 		
-		if ((! $times) || (($weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
+		if ((! $times) || (($weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($weekday == 'Tuesday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
 
 			if (wp_doing_ajax()) {
 				echo get_home_url() . '/?wp_shamor=2';
@@ -169,6 +169,26 @@ class Shamor {
 				wp_redirect(home_url() . '/?wp_shamor=1');
 			}
 			die;
+		}
+	}
+
+	function load_elementor_css(){
+		$template_id = get_option('shamor_display_template');
+
+		if (! $template_id){
+			return;
+		}
+		if(class_exists('\Elementor\Plugin')){
+			$elementor =  \Elementor\Plugin::instance();
+			$elementor->frontend->enqueue_styles();
+		}
+		if(class_exists('\ElementorPro\Plugin')){
+			$elementor =  \ElementorPro\Plugin::instance();
+			$elementor->enqueue_styles();
+		}
+		if(class_exists('\Elementor\Core\Files\CSS\Post')){
+			$css_file = new \Elementor\Core\Files\CSS\Post($template_id);
+			$css_file->enqueue();
 		}
 	}
 

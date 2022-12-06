@@ -5,6 +5,7 @@
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
    Version: 1.5.1
    Author: Rivka Chollack, Amiad Bareli
+   Author URI: https://wpshamor.com/#how
    */
 
 defined( 'ABSPATH' ) or die( 'No access' );

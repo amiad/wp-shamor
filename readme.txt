@@ -4,7 +4,7 @@ Tags: shabbat, jewish
 Requires at least: 2.0
 Tested up to: 6.1
 Requires PHP: 5.3
-Stable tag: 1.5
+Stable tag: 1.5.1
 License: GPL
 
 Redirect user out of your site on Shabbat and Holiday.

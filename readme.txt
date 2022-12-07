@@ -27,8 +27,7 @@ Read more on the <a href="https://wpshamor.com/">official website</a>.
 = 1.6 =
 * Fix bug with Elemenetor theme
 * Checking if Elemenetor is installed and displaying options accordingly
-* 
-
+* Add noindex meta to block page
 = 1.5.1 =
 * Add default message of block
 * Add get_havdalah_hour function

@@ -4,7 +4,7 @@ Tags: shabbat, jewish
 Requires at least: 2.0
 Tested up to: 6.1
 Requires PHP: 5.3
-Stable tag: 1.5.2
+Stable tag: 1.6
 License: GPL
 
 Redirect user out of your site on Shabbat and Holiday.
@@ -24,13 +24,15 @@ Read more on the <a href="https://wpshamor.com/">official website</a>.
 
 == Changelog ==
 
-= 1.5.2 =
+= 1.6 =
 * Fix bug with Elemenetor theme
 * Checking if Elemenetor is installed and displaying options accordingly
+* 
 
 = 1.5.1 =
 * Add default message of block
 * Add get_havdalah_hour function
+* Add noindex meta to block page
 = 1.5 =
 * Add support Elemenetor CSS
 = 1.4.1 =

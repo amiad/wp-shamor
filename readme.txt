@@ -25,7 +25,8 @@ Read more on the <a href="https://wpshamor.com/">official website</a>.
 == Changelog ==
 
 = 1.5.2 =
-* Fix bug with elemenetor theme
+* Fix bug with Elemenetor theme
+* Checking if Elemenetor is installed and displaying options accordingly
 
 = 1.5.1 =
 * Add default message of block

@@ -256,6 +256,7 @@ class Shamor {
 					<th scope="row">טקסט זה יוצג לגולשים בזמן שהאתר יהיה חסום</th>				
 					<td><input type="text" name="shamor_display_text" value="<?php echo esc_attr( get_option('shamor_display_text') ); ?>" /></td>
 				</tr>
+				<?php if (shortcode_exists('elementor-template')):?>
 				<tr valign="bottom">
 					<th scope="row">או לחילופין בחרו את הטמפלייט  שיוצג בדף החסימה (ממאגר הטמפלייטים של אלמנטור הנמצאים באתר שלכם):</th>
 					<th>הקפידו לבחור טמפלייט ללא אפשרות גלילה, וללא אפשרות שום פעולה כדי שלא יגרם חילול שבת ח"ו</th>
@@ -286,6 +287,7 @@ class Shamor {
 						טיפ: בטמפלייט החסימה ניתן לשלב את השורטקוד <code>[wp_shammor_countdown]</code> כדי להציג סטופר המראה עוד כמה זמן יפתח האתר מחדש.
 					</td>
 				</tr>
+				<?php endif;?>
 			</table>
 			
 			<?php submit_button(); ?>

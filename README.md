@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.5.1
+**Stable tag:** 1.6
 
 **License:** GPL
 
@@ -27,6 +27,10 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.5.1 ###
+* Add default message of block
+* Add get_havdalah_hour function
+* Add noindex meta to block page
 ### 1.5.1 ###
 * Add default message of block
 * Add get_havdalah_hour function

@@ -3,7 +3,7 @@
    Plugin Name: Shamor
    Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
-   Version: 1.5.1
+   Version: 1.5.2
    Author: Rivka Chollack, Amiad Bareli
    Author URI: https://wpshamor.com/#how
    */
@@ -24,7 +24,7 @@ class Shamor {
 			return;
 		}
 		
-		add_filter('template_include', [$this, 'block_site']);
+		add_filter('template_include', [$this, 'block_site'], 9999);
 		add_action('template_redirect', [$this, 'move_out_of_site']);
 		add_action('admin_menu', [$this, 'shamor_plugin_menu']);
 		add_action('wp_enqueue_scripts', [$this, 'wp_shammor_enqueue']);

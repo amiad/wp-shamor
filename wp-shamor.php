@@ -4,8 +4,8 @@
    Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
    Version: 1.6.1
-   Author: Rivka Chollack, Amiad Bareli
-   Author URI: https://wpshamor.com/#how
+   Author: wpshamor.com
+   Author URI: https://wpshamor.com/
    */
 
 defined( 'ABSPATH' ) or die( 'No access' );

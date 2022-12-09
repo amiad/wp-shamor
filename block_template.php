@@ -23,7 +23,7 @@
 			$shamor_text = get_option('shamor_display_text');
 	        echo '<div style="text-align: center; padding: 100px;"><h1>';
 			if ($shamor_text){
-	        	echo esc_html($shamor_text);
+	        	echo do_shortcode(esc_html($shamor_text));
 			}
 			else {
 				echo ' שבת שלום! נשוב לפעילות עם צאת השבת בשעה ' . $shamor->get_havdalah_hour();

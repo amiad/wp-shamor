@@ -120,7 +120,7 @@ class Shamor {
 	}
 
 	function get_hebdate($str = 'now'){
-		$juldate = gregoriantojd(...explode('/', date('m/d/Y', strtotime("$this->location->weekday $str"))));
+		$juldate = gregoriantojd(...explode('/', date('m/d/Y', strtotime($this->location->weekday . " $str"))));
 		$hebdate = jdtojewish($juldate, true);
 		$hebdate = iconv("windows-1255", "UTF-8", $hebdate);
 

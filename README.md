@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.6.1 ###
+* Fix bug at friday
 ### 1.5.1 ###
 * Add default message of block
 * Add get_havdalah_hour function

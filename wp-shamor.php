@@ -59,7 +59,10 @@ class Shamor {
 			return apply_filters('shamor_shabbat_times', false);
 		}
 
-		$sunset = date_sun_info(time(), $this->location->latitude, $this->location->longitude)['sunset'];
+		$dt = new DateTime("now", new DateTimeZone($this->location->timeZone));
+		$this->location->weekday = $dt->format('l');
+
+		$sunset = date_sun_info(strtotime($this->location->weekday), $this->location->latitude, $this->location->longitude)['sunset'];
 		$candle_lighting = $sunset - SELF::CANDLE_BEFORE_SUNSET * 60;
 		$havdalah = $sunset + SELF::HAVDALAH_AFTER_SUNSET * 60;
 
@@ -158,10 +161,8 @@ class Shamor {
 		}
 
 		$times = $this->get_shabbat_times();
-		$dt = new DateTime("now", new DateTimeZone($this->location->timeZone));
-		$weekday = $dt->format('l');
 		
-		if ((! $times) || (($weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
+		if ((! $times) || (($this->location->weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($this->location->weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
 
 			if (wp_doing_ajax()) {
 				echo get_home_url() . '/?wp_shamor=2';

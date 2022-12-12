@@ -26,6 +26,7 @@ Read more on the <a href="https://wpshamor.com/">official website</a>.
 
 = 1.6.1 =
 * Fix bug at friday
+* Add shortcode `[wp_shamor_havdalah_hour]`
 = 1.6 =
 * Fix bug with Elemenetor theme
 * Checking if Elemenetor is installed and displaying options accordingly

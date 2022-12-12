@@ -31,6 +31,7 @@ class Shamor {
 		add_action('wp_ajax_validate_wp_shammor', [$this, 'validate_wp_shammor']);
 		add_action('wp_ajax_nopriv_validate_wp_shammor', [$this, 'validate_wp_shammor']);
 		add_shortcode('wp_shammor_countdown', [$this, 'wp_shammor_countdown']);
+		add_shortcode('wp_shamor_havdalah_hour', [$this, 'get_havdalah_hour']);
 	}
 
 	function show_admin_error(){
@@ -283,12 +284,12 @@ class Shamor {
 							?>
 					</select></td>
 				</tr>
+				<?php endif;?>
 				<tr>
 					<td colspan="3">
-						טיפ: בטמפלייט החסימה ניתן לשלב את השורטקוד <code>[wp_shammor_countdown]</code> כדי להציג סטופר המראה עוד כמה זמן יפתח האתר מחדש.
+						טיפ: בטמפלייט החסימה ניתן לשלב את השורטקוד <code>[wp_shammor_countdown]</code> כדי להציג סטופר המראה עוד כמה זמן יפתח האתר מחדש. או את השורטקוד <code>[wp_shamor_havdalah_hour]</code> להצגת שעת הפתיחה.
 					</td>
 				</tr>
-				<?php endif;?>
 			</table>
 			
 			<?php submit_button(); ?>

@@ -1,4 +1,7 @@
-<!doctype html>
+<?php 
+	$times = $this->get_shabbat_times();
+	$shamor->shamor_site_get_headers_503($times['havdalah']);
+?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>" />
@@ -7,8 +10,6 @@
 	<link rel="profile" href="https://gmpg.org/xfn/11" />
 	<?php 
 	wp_head(); 
-	if(isset($hl_date))
-		$shamor->shamor_site_get_headers_503($hl_date);
 	?>
 	<script>
 		shouldShammor = false;

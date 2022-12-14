@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.6.1
+**Stable tag:** 1.6.2
 
 **License:** GPL
 
@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.6.2 ###
+* Fix 503 bug
 ### 1.6.1 ###
 * Fix bug at friday
 * Add shortcode `[wp_shamor_havdalah_hour]`

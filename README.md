@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.6.2
+**Stable tag:** 1.6.2.1
 
 **License:** GPL
 

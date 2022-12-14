@@ -1,5 +1,5 @@
 <?php 
-	$times = $this->get_shabbat_times();
+	$times = $shamor->get_shabbat_times();
 	$shamor->shamor_site_get_headers_503($times['havdalah']);
 ?><!doctype html>
 <html <?php language_attributes(); ?>>

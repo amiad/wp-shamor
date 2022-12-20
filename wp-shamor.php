@@ -245,12 +245,12 @@ class Shamor {
 			<table class="form-table">
 				<tr valign="top">
 					<th scope="row">הגדירו כמה דקות לפני שבת האתר יחסם:</th>
-					<th scope="row">שימו לב: זמן שבת המוגדר הוא מ 18 דקות לפני שקיעה</th>			
+					<th scope="row">זמן כניסת שבת הוא 18 דקות לפני השקיעה, תוכלו להוסיף דקות נוספות על זמן זה</th>			
 					<td><input type="number" name="shamor_start_time" size="3" value="<?php echo esc_attr( $this->get_time_option('shamor_start_time') ); ?>" /></td>
 				</tr>			
 				<tr valign="bottom">
 					<th scope="row">הגדירו כמה דקות אחרי שבת האתר יפתח:</th>		
-					<th scope="row">שימו לב: זמן שבת המוגדר הוא עד 50 דקות אחרי שקיעה</th>				
+					<th scope="row">זמן יציאת שבת הוא 50 דקות אחרי השקיעה, תוכלו להוסיף דקות נוספות על זמן זה</th>				
 					<td><input type="number" name="shamor_end_time" size="3" value="<?php echo esc_attr( $this->get_time_option('shamor_end_time') ); ?>" /></td>
 				</tr>			
 				<tr valign="bottom">

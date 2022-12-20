@@ -3,7 +3,7 @@
    Plugin Name: Shamor
    Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
-   Version: 1.6.2.1
+   Version: 1.6.3
    Author: wpshamor.com
    Author URI: https://wpshamor.com/
    */
@@ -246,12 +246,12 @@ class Shamor {
 				<tr valign="top">
 					<th scope="row">הגדירו כמה דקות לפני שבת האתר יחסם:</th>
 					<th scope="row">שימו לב: זמן שבת המוגדר הוא מ 18 דקות לפני שקיעה</th>			
-					<td><span>הזינו זמן בפורמט של 00:00 - שעות ודקות</span><br><input type="number" name="shamor_start_time" value="<?php echo esc_attr( $this->get_time_option('shamor_start_time') ); ?>" /></td>
+					<td><input type="number" name="shamor_start_time" size="3" value="<?php echo esc_attr( $this->get_time_option('shamor_start_time') ); ?>" /></td>
 				</tr>			
 				<tr valign="bottom">
 					<th scope="row">הגדירו כמה דקות אחרי שבת האתר יפתח:</th>		
 					<th scope="row">שימו לב: זמן שבת המוגדר הוא עד 50 דקות אחרי שקיעה</th>				
-					<td><span>הזינו זמן בפורמט של 00:00 - שעות ודקות</span><br><input type="number" name="shamor_end_time" value="<?php echo esc_attr( $this->get_time_option('shamor_end_time') ); ?>" /></td>
+					<td><input type="number" name="shamor_end_time" size="3" value="<?php echo esc_attr( $this->get_time_option('shamor_end_time') ); ?>" /></td>
 				</tr>			
 				<tr valign="bottom">
 					<th scope="row">הגדירו את הטקסט היוצג בדף החסימה:</th>		
@@ -424,7 +424,7 @@ class Shamor {
 		// support old time format
 		$option = get_option($name);
 		if ($option && strpos($option, ':')){
-			$option = gmdate("1970-01-01 $option");
+			$option = strtotime("1970-01-01 0:$option");
 		}
 		return $option;
 	}

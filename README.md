@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.6.2.1
+**Stable tag:** 1.6.3
 
 **License:** GPL
 
@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.6.3 ###
+* Change time field in settings to number time and add support to old format
 ### 1.6.2 ###
 * Fix 503 bug
 ### 1.6.1 ###

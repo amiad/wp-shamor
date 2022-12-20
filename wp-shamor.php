@@ -67,11 +67,11 @@ class Shamor {
 		$candle_lighting = $sunset - SELF::CANDLE_BEFORE_SUNSET * 60;
 		$havdalah = $sunset + SELF::HAVDALAH_AFTER_SUNSET * 60;
 
-		$start_time = get_option('shamor_start_time') ?: '0';
-		$end_time = get_option('shamor_end_time') ?: '0';
+		$start_time = $this->get_time_option('shamor_start_time') ?: '0';
+		$end_time = $this->get_time_option('shamor_end_time') ?: '0';
 
-		$candle_lighting = strtotime("+$start_time", $candle_lighting);
-		$havdalah = strtotime("-$end_time", $havdalah);
+		$candle_lighting = strtotime("-$start_time min", $candle_lighting);
+		$havdalah = strtotime("+$end_time min", $havdalah);
 
 		$times = [
 			'candle_lighting' => $candle_lighting,
@@ -246,12 +246,12 @@ class Shamor {
 				<tr valign="top">
 					<th scope="row">הגדירו כמה דקות לפני שבת האתר יחסם:</th>
 					<th scope="row">שימו לב: זמן שבת המוגדר הוא מ 18 דקות לפני שקיעה</th>			
-					<td><span>הזינו זמן בפורמט של 00:00 - שעות ודקות</span><br><input type="time" name="shamor_start_time" value="<?php echo esc_attr( get_option('shamor_start_time') ); ?>" /></td>
+					<td><span>הזינו זמן בפורמט של 00:00 - שעות ודקות</span><br><input type="number" name="shamor_start_time" value="<?php echo esc_attr( $this->get_time_option('shamor_start_time') ); ?>" /></td>
 				</tr>			
 				<tr valign="bottom">
 					<th scope="row">הגדירו כמה דקות אחרי שבת האתר יפתח:</th>		
 					<th scope="row">שימו לב: זמן שבת המוגדר הוא עד 50 דקות אחרי שקיעה</th>				
-					<td><span>הזינו זמן בפורמט של 00:00 - שעות ודקות</span><br><input type="time" name="shamor_end_time" value="<?php echo esc_attr( get_option('shamor_end_time') ); ?>" /></td>
+					<td><span>הזינו זמן בפורמט של 00:00 - שעות ודקות</span><br><input type="number" name="shamor_end_time" value="<?php echo esc_attr( $this->get_time_option('shamor_end_time') ); ?>" /></td>
 				</tr>			
 				<tr valign="bottom">
 					<th scope="row">הגדירו את הטקסט היוצג בדף החסימה:</th>		
@@ -418,6 +418,15 @@ class Shamor {
 		$havdalah_hour = $dt->format('H:i');
 
 		return apply_filters('shamor_get_havdalah_hour', $havdalah_hour);
+	}
+
+	function get_time_option($name = 'shamor_start_time'){
+		// support old time format
+		$option = get_option($name);
+		if ($option && strpos($option, ':')){
+			$option = gmdate("1970-01-01 $option");
+		}
+		return $option;
 	}
 }
 

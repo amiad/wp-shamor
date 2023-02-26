@@ -256,7 +256,7 @@ class Shamor {
 				<tr valign="bottom">
 					<th scope="row">הגדירו את הטקסט היוצג בדף החסימה:</th>		
 					<th scope="row">טקסט זה יוצג לגולשים בזמן שהאתר יהיה חסום. אם תשאירו שדה זה ריק - תופיע הודעת ברירת מחדל.</th>				
-					<td><input type="text" name="shamor_display_text" value="<?php echo esc_attr( get_option('shamor_display_text') ); ?>" /></td>
+					<td><?php wp_editor(get_option('shamor_display_text'), 'shamor_display_text', ['textarea_name' => 'shamor_display_text', 'editor_height' => 190]);?></td>
 				</tr>
 				<?php if (shortcode_exists('elementor-template')):?>
 				<tr valign="bottom">

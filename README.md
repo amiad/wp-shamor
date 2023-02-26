@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.7
+**Stable tag:** 1.7.1
 
 **License:** GPL
 
@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.7.1 ###
+* TinyMCE field in shamor_display_text
 ### 1.7 ###
 * Update IP DB
 ### 1.6.3 ###

@@ -3,7 +3,7 @@
    Plugin Name: Shamor
    Plugin URI: https://wpshamor.com/
    description: A plugin to redirect user out of your site on Shabbat and Holiday.
-   Version: 1.7.1
+   Version: 1.8
    Author: wpshamor.com
    Author URI: https://wpshamor.com/
    */
@@ -24,8 +24,8 @@ class Shamor {
 			return;
 		}
 		
-		add_filter('template_include', [$this, 'block_site'], 9999);
-		add_action('template_redirect', [$this, 'move_out_of_site']);
+		//add_filter('template_include', [$this, 'block_site'], 9999);
+		add_filter('template_include', [$this, 'move_out_of_site'], 9999);
 		add_action('admin_menu', [$this, 'shamor_plugin_menu']);
 		add_action('wp_enqueue_scripts', [$this, 'wp_shammor_enqueue']);
 		add_action('wp_ajax_validate_wp_shammor', [$this, 'validate_wp_shammor']);
@@ -155,24 +155,28 @@ class Shamor {
 		return $template;
 	}
 
-	function move_out_of_site(){
-
-		if (! empty($_GET['wp_shamor'])){
-			return;
-		}
+	function move_out_of_site($template){
 
 		$times = $this->get_shabbat_times();
 		
-		if ((! $times) || (($this->location->weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($this->location->weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
-
-			if (wp_doing_ajax()) {
-				echo get_home_url() . '/?wp_shamor=2';
-			}
-			else {
-				wp_redirect(home_url() . '/?wp_shamor=1');
-			}
-			die;
+		if (! empty($_GET['wp_shamor']) || (! $times) || (($this->location->weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($this->location->weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
+			$status = 'blocked';
+			add_action( 'wp_enqueue_scripts', [$this, 'load_elementor_css']);
+			$template = __DIR__ . '/block_template.php';
+			// if (wp_doing_ajax()) {
+			// 	echo get_home_url() . '/?wp_shamor=2';
+			// }
+			// else {
+			// 	wp_redirect(home_url() . '/?wp_shamor=1');
+			// }
+			// die;
 		}
+		else {
+			$status = 'opened';
+		}
+
+		$this->check_clean_cache($status);
+		return $template;
 	}
 
 	function load_elementor_css(){
@@ -428,6 +432,55 @@ class Shamor {
 		}
 		return $option;
 	}
+
+	function clear_all_caches(){
+		do_action('shamor_clear_all_caches');
+		$cache_functions = array(
+			'wp_cache_clear_cache',           // WP Super Cache
+			'w3tc_pgcache_flush',             // W3 Total Cache
+			'rocket_clean_domain',            // WP Rocket
+			'sg_cachepress_purge_cache',      // SG Optimizer (SiteGround)
+			'breeze_clear_all_cache',         // Breeze (By Cloudways)
+			'wphb_clear_cache'                // Hummingbird Cache
+		);
+	
+		foreach ($cache_functions as $function){
+			if (function_exists($function)) {
+				$function();
+			}
+		}
+	
+		// For plugins where we need to check for class methods:
+		if (isset($GLOBALS['wp_fastest_cache']) && method_exists($GLOBALS['wp_fastest_cache'], 'deleteCache')) {
+			$GLOBALS['wp_fastest_cache']->deleteCache();
+		}
+	
+		if (class_exists('LiteSpeed_Cache_API') && method_exists('LiteSpeed_Cache_API', 'purge_all')) {
+			LiteSpeed_Cache_API::purge_all();
+		}
+	
+		if (class_exists('comet_cache')) {
+			comet_cache::clear();
+		}
+	
+		if (has_action('ce_clear_cache')) {
+			do_action('ce_clear_cache');  // Cache Enabler
+		}
+	
+		// Clear WordPress Internal Cache
+		wp_cache_flush();
+	}
+
+	function check_clean_cache($status){
+		// Get the currently saved status
+		$saved_status = get_option('shamor_cache_status');
+
+		if ($saved_status !== $status) {
+			$this->clear_all_caches();
+			update_option('shamor_cache_status', $status);
+		}
+	}
+	
 }
 
 $shamor = new Shamor();

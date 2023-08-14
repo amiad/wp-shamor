@@ -17,7 +17,7 @@
 </head>
 <body <?php body_class(); ?>>
 <div id="primary" class="content-area">
-	<main id="main" class="site-main" role="main">
+	<main id="main" class="site-main" role="main" data-nosnippet>
 		<?php
 		$template_id = get_option('shamor_display_template');
 		if(empty($template_id)) {

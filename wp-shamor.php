@@ -15,8 +15,10 @@ use GeoIp2\Database\Reader;
 
 class Shamor {
 
-	const CANDLE_BEFORE_SUNSET = 18;
-	const HAVDALAH_AFTER_SUNSET = 50;
+	private const CANDLE_BEFORE_SUNSET = 18;
+	private const HAVDALAH_AFTER_SUNSET = 50;
+
+	private $http_status;
 
 	function __construct(){
 		if (! extension_loaded('calendar')){
@@ -24,8 +26,8 @@ class Shamor {
 			return;
 		}
 		
-		//add_filter('template_include', [$this, 'block_site'], 9999);
 		add_filter('template_include', [$this, 'move_out_of_site'], 9999);
+		add_filter('status_header', [$this, 'capture_status'], 10, 2);
 		add_action('admin_menu', [$this, 'shamor_plugin_menu']);
 		add_action('wp_enqueue_scripts', [$this, 'wp_shammor_enqueue']);
 		add_action('wp_ajax_validate_wp_shammor', [$this, 'validate_wp_shammor']);
@@ -160,16 +162,15 @@ class Shamor {
 		$times = $this->get_shabbat_times();
 		
 		if (! empty($_GET['wp_shamor']) || (! $times) || (($this->location->weekday == 'Friday' || $this->is_erev_yom_tov()) && time() > $times['candle_lighting']) || (($this->location->weekday == 'Saturday' || $this->is_yom_tov()) && time() < $times['havdalah'])){
+
+			if (wp_doing_ajax()) {
+				return true;
+			}
+
 			$status = 'blocked';
+			$this->shamor_site_get_headers_503($times['havdalah']);
 			add_action( 'wp_enqueue_scripts', [$this, 'load_elementor_css']);
 			$template = __DIR__ . '/block_template.php';
-			// if (wp_doing_ajax()) {
-			// 	echo get_home_url() . '/?wp_shamor=2';
-			// }
-			// else {
-			// 	wp_redirect(home_url() . '/?wp_shamor=1');
-			// }
-			// die;
 		}
 		else {
 			$status = 'opened';
@@ -327,15 +328,17 @@ class Shamor {
 		<?php
 	}	
 
-	function shamor_site_get_headers_503($date_end = '')
-	{
+	function shamor_site_get_headers_503($date_end = ''){
+		if ($this->http_status != 200){
+			return;
+		}
 		nocache_headers();
 		$protocol = 'HTTP/1.0';
 		if (isset($_SERVER['SERVER_PROTOCOL']) && 'HTTP/1.1' === $_SERVER['SERVER_PROTOCOL']) {
 			$protocol = 'HTTP/1.1';
 		}
 		header("$protocol 503 Service Unavailable", true, 503);
-		if($date_end != ''){
+		if ($date_end != ''){
 			header('Retry-After: ' . gmdate('D, d M Y H:i:s', $date_end));
 		}
 	}
@@ -347,7 +350,8 @@ class Shamor {
 	}
 
 	function validate_wp_shammor() {
-		$this->move_out_of_site();
+		$blocked = $this->move_out_of_site();
+		wp_send_json_success(['blocked' => $blocked]);
 	}
 
 	function wp_shammor_countdown($atts) {
@@ -466,6 +470,17 @@ class Shamor {
 		if (has_action('ce_clear_cache')) {
 			do_action('ce_clear_cache');  // Cache Enabler
 		}
+
+		// uPress EzCache
+		if (class_exists('Upress\EzCache\Cache') && method_exists('Upress\EzCache\Cache', 'clear_cache')) {
+			Upress\EzCache\Cache::instance()->clear_cache();
+		}
+
+		// Cloudflare Cache Clearing
+		if (class_exists('\CF\WordPress\Hooks')) {
+			$cloudflareHooks = new \CF\WordPress\Hooks();
+			$cloudflareHooks->purgeCacheEverything();
+		}
 	
 		// Clear WordPress Internal Cache
 		wp_cache_flush();
@@ -480,6 +495,11 @@ class Shamor {
 			update_option('shamor_cache_status', $status);
 		}
 	}
+
+	function capture_status($status_header, $code) {
+        $this->http_status = $code;
+        return $status_header; // return unchanged
+    }
 	
 }
 

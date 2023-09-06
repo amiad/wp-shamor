@@ -1,14 +1,16 @@
 jQuery(document).ready(function(){
-    var data = {
+    const data = {
 		"action" : "validate_wp_shammor"
 	};
-	if(typeof(shouldShammor) == 'undefined' || shouldShammor != false) {
+	if (typeof(shouldShammor) == 'undefined' || shouldShammor != false) {
 		shouldShammor = false;
-		jQuery.post(ajax_object.ajax_url, data, function(response) {
-			response = response.trim();
-			if(response && response != "0" && response != "" && !(typeof response === 'string' && response.length === 0)) {
-				window.location.href = response;
-			}
-		});
+		setInterval(() => {
+			jQuery.post(ajax_object.ajax_url, data, function(response) {
+				if( response.blocked === true) {
+					location.reload();
+					return;
+				}
+			});
+		}, 60000);
 	}
 });

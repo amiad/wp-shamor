@@ -27,6 +27,10 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.8 ###
+* Add support for cache plugins: WP Super Cache, W3 Total Cache, WP Rocket, SG Optimizer (SiteGround), Breeze (By Cloudways), Hummingbird Cache, WP Fastest Cache, LiteSpeed Cache, Comet Cache, Cache Enabler, uPress EzCache, Cloudflare WordPress Plugin.
+* Improve SEO (Thanks to <a href="https://hamefakeh.co.il">Hamefakeh</a>)
+* Fix Ajax script
 ### 1.7.1 ###
 * TinyMCE field in shamor_display_text
 ### 1.7 ###

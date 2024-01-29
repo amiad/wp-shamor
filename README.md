@@ -13,9 +13,9 @@
 
 **License:** GPL
 
-Redirect user out of your site on Shabbat and Holiday
-
 ## Description ##
+Redirect user out of your site on Shabbat and Holiday.
+
 Read more on the [official website](https://wpshamor.com/).
 
 ## Installation ##

@@ -11,6 +11,8 @@ Redirect user out of your site on Shabbat and Holiday.
 
 == Description ==
 
+Redirect user out of your site on Shabbat and Holiday.
+
 Read more on the <a href="https://wpshamor.com/">official website</a>.
 
 == Installation ==

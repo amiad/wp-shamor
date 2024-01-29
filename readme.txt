@@ -2,7 +2,7 @@
 Contributors: hatul
 Tags: shabbat, jewish
 Requires at least: 2.0
-Tested up to: 6.1
+Tested up to: 6.4.2
 Requires PHP: 5.3
 Stable tag: 1.8
 License: GPL

@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.8.1 ###
+* Fix bug validate_wp_shammor
 ### 1.8 ###
 * Add support for cache plugins: WP Super Cache, W3 Total Cache, WP Rocket, SG Optimizer (SiteGround), Breeze (By Cloudways), Hummingbird Cache, WP Fastest Cache, LiteSpeed Cache, Comet Cache, Cache Enabler, uPress EzCache, Cloudflare WordPress Plugin.
 * Improve SEO (Thanks to <a href="https://hamefakeh.co.il">Hamefakeh</a>)

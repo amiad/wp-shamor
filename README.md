@@ -9,7 +9,7 @@
 
 **Requires PHP:** 5.3
 
-**Stable tag:** 1.8.1
+**Stable tag:** 1.8.2
 
 **License:** GPL
 
@@ -27,6 +27,8 @@ Read more on the [official website](https://wpshamor.com/).
 
 
 ## Changelog ##
+### 1.8.2 ###
+* Fix some small bugs
 ### 1.8.1 ###
 * Fix bug validate_wp_shammor
 ### 1.8 ###
